@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:jms="http://www.springframework.org/schema/integration/jms"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task.xsd
+    http://www.springframework.org/schema/integration/jms
+    http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+
+
+    <jms:inbound-channel-adapter destination-name="queue1" channel="handlerChannel">
+        <int:poller fixed-delay="0" task-executor="producerThreadExecutor"/>
+    </jms:inbound-channel-adapter>
+
+    <task:executor id="producerThreadExecutor" pool-size="3" queue-capacity="0" rejection-policy="CALLER_RUNS"/>
+
+    <int:service-activator input-channel="handlerChannel" ref="consumer" method="handleMessage"/>
+</beans>
