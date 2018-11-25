@@ -15,10 +15,10 @@
 
 
     <jms:inbound-channel-adapter destination-name="queue1" channel="handlerChannel">
-        <int:poller fixed-delay="0" task-executor="producerThreadExecutor"/>
+        <int:poller fixed-delay="100" task-executor="producerThreadExecutor"/>
     </jms:inbound-channel-adapter>
 
-    <task:executor id="producerThreadExecutor" pool-size="3" queue-capacity="0" rejection-policy="CALLER_RUNS"/>
+    <task:executor id="producerThreadExecutor" pool-size="3" rejection-policy="CALLER_RUNS"/>
 
     <int:service-activator input-channel="handlerChannel" ref="consumer" method="handleMessage"/>
 </beans>
